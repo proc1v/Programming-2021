@@ -17,14 +17,15 @@ void printArr(int arr[], int size)
 		cout << arr[i] << ' ';
 	cout << endl;
 }
-
-void delete_identical_elements(int arr1[], int arr2[], int& size1, int& size2)
+int* delete_identical_elements(int*& arr1, int*& arr2, int& size1, int& size2)
 {
 	int count = 0;
+	int index_of_temp_arr = 0;
 	bool identical = false;
 	int* temp_arr = new int[size1];
 	
 	for (int i = 0; i < size1; ++i) {
+		identical = false;
 		for (int j = 0; j < size2; ++j) {
 			if (arr1[i] == arr2[j]) {
 				identical = true;
@@ -32,8 +33,10 @@ void delete_identical_elements(int arr1[], int arr2[], int& size1, int& size2)
 				break;
 			}
 		}
-		if (!identical)
-			temp_arr[i] = arr1[i];
+		if (!identical) {
+			temp_arr[index_of_temp_arr] = arr1[i];
+			index_of_temp_arr++;
+		}
 	}
 
 	size1 -= count;
@@ -41,8 +44,11 @@ void delete_identical_elements(int arr1[], int arr2[], int& size1, int& size2)
 	for (int i = 0; i < size1; ++i) {
 		new_arr1[i] = temp_arr[i];
 	}
+	
 	delete[] temp_arr;
-	arr1 = new_arr1;
+	delete[] arr1;
+
+	return new_arr1;
 }
 
 void task3()
@@ -64,7 +70,7 @@ void task3()
 	cout << "2nd array:";
 	printArr(arr2, size2);
 
-	delete_identical_elements(arr1, arr2, size1, size2);
+	arr1 = delete_identical_elements(arr1, arr2, size1, size2);
 
 	cout << "Changed 1st array:";
 	printArr(arr1, size1);
